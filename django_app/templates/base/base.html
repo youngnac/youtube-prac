@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>YourVideoBox</title>
+</head>
+
+<body>
+<h2>Youtube Videos in your Box</h2>
+{% if user.is_authenticated %}
+<p>Hi! {{ user.username }} || <a href="{%url 'member:logout' %}"><button>logout</button></a>    ||   <a href="{%url 'member:my-box' %}">Open your Box</a>    ||   <a href="{%url 'video:search_video' %}">Search</a>
+{% else %}
+<p>Please Login || <a href="{%url 'member:login' %}"><button>login</button></a>    ||    <a href="{%url 'video:search_video' %}">Search</a>
+</p>
+<hr>
+{% endif %}
+{% block content %}
+
+{% endblock %}
+
+
+</body>
+</html>

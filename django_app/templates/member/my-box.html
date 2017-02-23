@@ -1,0 +1,33 @@
+{% extends "base/base.html" %}
+{% block content %}
+
+
+{% for video in my_box %}
+<div>
+    <form action="{% url 'video:remove-view' video=video.video.video_id %}" method="POST">{% csrf_token %}
+        <button>Remove it!</button>
+    </form>
+    <p>{{ video.video.title }}</p>
+    <p><img src="{{ video.thumbnail }}" alt=""></p>
+    <p>{{ video.video.published_date }}</p>
+    <p>{{ video.video.channel_title }}</p>
+    <p>BookMarked on: {{ video.bookmarked_date }}</p>
+    <p><a href="https://www.youtube.com/watch?v={{ video.video.video_id }}">direct link to video</a></p>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.video.video_id }}" frameborder="0"
+            allowfullscreen></iframe>
+</div>
+<hr>
+<div class="paginator">
+    {% if bookmarks.has_previous %}
+    <a href="?page={{ bookmarks.previous_page_number }}">Prev</a>
+    {% endif %}
+    <span>
+        page{{ bookmarks.number }} of {{ bookmarks.paginator.num_pages }}
+    </span>
+
+    {% if bookmarks.has_next %}
+    <a href="">next</a>
+    {% endif %}
+</div>
+{% endfor %}
+{% endblock %}

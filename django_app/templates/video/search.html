@@ -1,0 +1,58 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+<form action="" method="GET">
+    {{ form }}
+    <button type="submit">search</button>
+</form>
+
+{% if prev_pg %}
+<form action="">
+    <input type="hidden" name="keyword" value="{{ keyword }}">
+    <input type="hidden" name="page_token" value="{{ prev_pg }}">
+    <input type="hidden" name="num" value="{{ num }}">
+    <button>prev</button>
+</form>
+{% endif %}
+
+{% if nxt_pg %}
+<form action="">
+    <input type="hidden" name="keyword" value="{{ keyword }}">
+    <input type="hidden" name="page_token" value="{{ nxt_pg }}">
+    <input type="hidden" name="num" value="{{ num }}">
+    <button>next</button>
+</form>
+{% endif %}
+
+{% for video in list %}
+
+<hr>
+<div>
+    {% if video.video_id in user_box %}
+    <p>Already in your box!
+    <form action="{% url 'video:search-remove-view' video=video.video_id %}" method="POST">{% csrf_token %}
+        <input type="hidden" name="path" value="{{ request.get_full_path }}">
+        <button type="submit">Remove it!</button>
+    </form>
+    </p>
+    {% else %}
+    <form action="{% url 'video:put-box-view' video=video.video_id  %}" method="POST">{% csrf_token %}
+        <button>Put in your Box</button>
+        <input type="hidden" name="path" value="{{ request.get_full_path }}">
+    </form>
+    {% endif %}
+    <p>{{ video.title }}</p>
+    <p><img src="{{ video.thumbnail }}" alt=""></p>
+    <p>{{ video.published_date }}</p>
+    <p>{{ video.channel_title }}</p>
+    <p><a href="https://www.youtube.com/watch?v={{ video.video_id }}">direct link to video</a></p>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.video_id }}" frameborder="0"
+            allowfullscreen></iframe>
+</div>
+
+<hr>
+{% endfor %}
+
+{% endblock %}
+
